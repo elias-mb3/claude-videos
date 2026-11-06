@@ -5,6 +5,7 @@ descreve o estilo que quer, e o Claude transcreve, propõe cortes, corrige a cor
 nos momentos importantes, cria gráficos animados, legenda, coloca trilha sonora com ducking e
 renderiza. Você aprova cada etapa.
 
+Funciona também com outros agentes de código ([veja abaixo](#usando-com-outros-modelos-gpt-sol-kimi-k31-e-similares)).
 Tudo roda **localmente, em containers Podman**. O container de edição **não tem acesso à
 rede**, então o seu vídeo nunca sai da máquina.
 
@@ -63,7 +64,7 @@ legendas, paleta, fontes, posição dos gráficos e áudio.
 - Linux com **Podman** (testado no Fedora 44, rootless). Funciona com Docker trocando `podman` por `docker` nos scripts de `bin/`.
 - ~12 GB livres (imagens + modelo Whisper large-v3 de ~3 GB).
 - CPU basta. GPU não é necessária.
-- [Claude Code](https://claude.com/claude-code). Os scripts também funcionam sem ele, à mão.
+- [Claude Code](https://claude.com/claude-code) ou outro agente de código com capacidades equivalentes.
 
 ## Instalação manual (opcional)
 
@@ -106,20 +107,29 @@ Tudo que define o vídeo fica em `projetos/<nome>/projeto.json` (veja o
 [modelo comentado](projetos/_modelo/projeto.json)). Ele é o estado do projeto: dá para fechar
 o Claude, voltar outro dia e continuar dele.
 
-## Uso manual (sem Claude)
+## Usando com outros modelos (GPT SOL, Kimi K3.1 e similares)
 
-```bash
-E="bin/editor python3 scripts/video.py viagem-praia"
-$E info            # resolução, rotação, duração
-$E transcrever     # build/transcricao.md
-$E cortes          # build/cortes.md
-$E cor             # build/cor.jpg
-# edite projetos/viagem-praia/projeto.json (zoom, gráficos, música, correções de legenda)
-$E tudo --preview  # saida/viagem-praia_preview.mp4
-$E tudo            # saida/viagem-praia_1080x1920.mp4
-```
+O ferramental não depende do Claude: quem faz o trabalho são os scripts e os containers. Qualquer
+agente de código com capacidades equivalentes consegue operar o repositório, por exemplo o GPT SOL,
+o Kimi K3.1 ou outro provider que venha a oferecer o mesmo. Ele precisa de:
 
-Músicas: `bin/ytdl viagem-praia "URL"` baixa o áudio em WAV para `projetos/viagem-praia/musicas/`.
+| Capacidade | Para quê |
+|---|---|
+| Executar comandos no terminal | rodar `bin/setup`, `bin/editor` e `scripts/video.py` |
+| Ler e editar arquivos | transcrição, `projeto.json`, estilos |
+| Ler imagens | conferir as folhas de contato (cor, legendas, gráficos) |
+| Tarefas em segundo plano | esperar renders longos sem gastar tokens (desejável) |
+| Subagentes ou modelo secundário | delegar setup e renders a um modelo mais barato (opcional) |
+
+Esses agentes costumam ler o [`AGENTS.md`](AGENTS.md), que traz as mesmas regras do `CLAUDE.md`
+em formato neutro. A frase de início é a mesma:
+
+> Baixe o repositório https://github.com/elias-mb3/claude-videos e configure para mim.
+
+Divisão recomendada, em qualquer provider: o **modelo mais capaz** orquestra e toma as decisões
+criativas (cortes, cor, zooms, gráficos, música), e um **modelo mais barato** executa setup e
+renders, devolvendo só resumos. Se o agente não tiver subagentes, o modelo principal faz tudo,
+seguindo as mesmas regras de economia de tokens.
 
 ## Estrutura
 
@@ -132,6 +142,7 @@ referencias/    suas referências de estilo + prompt para análise com modelo mu
 projetos/       um diretório por vídeo (ignorado pelo git, exceto _modelo)
 docs/           modelos e tokens, exemplo de settings do Claude Code, imagens (docs/img/src gera os mockups)
 CLAUDE.md       regras para o Claude Code neste repositório
+AGENTS.md       as mesmas regras para outros agentes (GPT SOL, Kimi K3.1, ...)
 .claude/skills/ skill editar-video (o fluxo passo a passo)
 .claude/agents/ subagentes configurador e executor-render
 ```
