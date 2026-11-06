@@ -12,8 +12,11 @@ O Claude lê texto curto (transcrição compacta, resumos) e miniaturas pequenas
 | Executar etapas, ajustar `projeto.json`, re-renderizar, corrigir legenda | **Sonnet** (5.5 ou mais novo) | Tarefas mecânicas; bem mais barato e rápido. |
 | Perguntas rápidas ("quanto falta?", "qual o loudness?") | **Haiku** | Suficiente para ler um log ou rodar um comando. |
 
-O jeito mais simples: `"model": "opusplan"` (veja `docs/claude-settings.exemplo.json`). O Opus
-planeja no modo de planejamento (Shift+Tab) e o Sonnet executa. Para trocar na hora, use `/model`.
+Neste repositório a divisão já é automática: a **sessão principal roda no Opus** (`"model": "opus"`
+em `docs/claude-settings.exemplo.json`) e orquestra. Os subagentes `configurador` e
+`executor-render` (`.claude/agents/`) rodam no Sonnet: instalam o ambiente e executam renders,
+devolvendo só um resumo de poucas linhas. Assim o contexto do Opus fica limpo para as decisões
+criativas. Para trocar de modelo na hora, use `/model`.
 
 ## Onde os tokens vão embora (e como evitar)
 

@@ -13,6 +13,31 @@ vídeo bruto ──► Whisper ──► cortes ──► cor + zoom ──► g
                  (texto)    (você aprova)              (HTML/GSAP → MOV alpha)    (ducking, loudnorm)
 ```
 
+## Comece com uma frase
+
+Este repositório é um **ferramental para o Claude Code**. Você não precisa instalar nada à mão:
+abra o Claude Code em qualquer pasta e diga:
+
+> Baixe o repositório https://github.com/elias-mb3/claude-videos e configure para mim.
+
+O Claude clona o repositório, lê o [`CLAUDE.md`](CLAUDE.md) e delega a instalação ao
+subagente `configurador`, que constrói os containers, baixa fontes e o modelo do Whisper e
+valida tudo com `bin/verificar`. Só o que exigir você (como `sudo` para instalar o Podman)
+volta para você. Depois:
+
+> Edite o vídeo ~/Vídeos/gravacao.mp4 para o TikTok.
+
+### Como o trabalho é dividido
+
+| Quem | Faz o quê |
+|---|---|
+| **Opus** (sessão principal) | Orquestra: conversa com você, lê a transcrição, decide cortes, cor, zooms, gráficos, músicas e legendas, e confere a qualidade |
+| Subagente `configurador` (Sonnet) | Instala e repara o ambiente |
+| Subagente `executor-render` (Sonnet) | Roda as etapas demoradas (transcrição, renders) e devolve só um resumo |
+
+Assim, o modelo mais capaz fica com as decisões criativas e o trabalho repetitivo sai mais
+barato, sem encher o contexto principal com logs. Detalhes em [docs/modelos-e-tokens.md](docs/modelos-e-tokens.md).
+
 ## Exemplos de uso (presets em `estilos/`)
 
 | Preset | Formato | Para quê | Características |
@@ -21,6 +46,15 @@ vídeo bruto ──► Whisper ──► cortes ──► cor + zoom ──► g
 | `instagram-reels` | 1080×1920 | Reels | Visual limpo, legendas em minúsculas, respeita as áreas cobertas pela interface do app |
 | `youtube` | 1920×1080 | Vídeo longo no YouTube | Ritmo de conversa, legenda em frase na base, capítulos no canto e `capitulos.txt` pronto para a descrição |
 | `romantico` | 1080×1920 | Vídeo pessoal (declaração, pedido, aniversário) | Ritmo calmo, serifas elegantes, paleta rosé e dourado, trilha instrumental suave |
+
+### Referências com um modelo multimodal (recomendado)
+
+O Claude Code não assiste vídeos. Se você tem assinatura de algum **modelo multimodal que processa
+vídeo**, use-o para analisar vídeos de referência (trechos do YouTube, TikTok ou Reels cujo estilo
+você quer copiar) e gerar um Markdown com ritmo, legendas, zooms, gráficos, cor e áudio, com
+timestamps e um bloco de parâmetros. Salve em `referencias/<estilo>/notas.md`. O Claude lê esse
+arquivo e converte em preset, o que melhora muito o resultado em relação a descrever o estilo
+de memória. O prompt pronto está em [`referencias/_modelo-analise.md`](referencias/_modelo-analise.md).
 
 Crie o seu copiando um preset. Os campos são autoexplicativos: resolução, cor, ritmo, zoom,
 legendas, paleta, fontes, posição dos gráficos e áudio.
@@ -32,17 +66,18 @@ legendas, paleta, fontes, posição dos gráficos e áudio.
 - CPU basta. GPU não é necessária.
 - [Claude Code](https://claude.com/claude-code). Os scripts também funcionam sem ele, à mão.
 
-## Instalação
+## Instalação manual (opcional)
 
 ```bash
-git clone https://github.com/<seu-usuario>/claude-videos && cd claude-videos
-bin/setup     # constrói as imagens, baixa fontes livres (OFL), GSAP e o modelo do Whisper
+git clone https://github.com/elias-mb3/claude-videos && cd claude-videos
+bin/setup       # constrói as imagens, baixa fontes livres (OFL), GSAP e o modelo do Whisper
+bin/verificar   # confere tudo; termina com PRONTO
 ```
 
 O `bin/setup` é o único passo que usa a internet, além do `bin/ytdl`.
 
 Opcional: `cp docs/claude-settings.exemplo.json .claude/settings.json` para usar o modelo
-recomendado (`opusplan`) e liberar os comandos do pipeline sem pedir permissão a cada vez,
+recomendado (Opus na sessão principal) e liberar os comandos do pipeline sem pedir permissão a cada vez,
 mantendo bloqueado o `hyperframes publish`.
 
 ## Uso com o Claude Code
@@ -88,15 +123,16 @@ Músicas: `bin/ytdl viagem-praia "URL"` baixa o áudio em WAV para `projetos/via
 ## Estrutura
 
 ```
-bin/            setup, editor (container sem rede), ytdl (container de download), novo-projeto
+bin/            setup, verificar, editor (container sem rede), ytdl (container de download), novo-projeto
 containers/     Containerfiles das duas imagens
 scripts/        video.py: o pipeline inteiro, em etapas
 estilos/        presets (TikTok, Reels, YouTube, romântico)
-referencias/    suas referências de estilo (ver README da pasta)
+referencias/    suas referências de estilo + prompt para análise com modelo multimodal
 projetos/       um diretório por vídeo (ignorado pelo git, exceto _modelo)
 docs/           modelos e tokens, exemplo de settings do Claude Code
 CLAUDE.md       regras para o Claude Code neste repositório
 .claude/skills/ skill editar-video (o fluxo passo a passo)
+.claude/agents/ subagentes configurador e executor-render
 ```
 
 ## Segurança e privacidade

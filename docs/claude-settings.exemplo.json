@@ -1,5 +1,5 @@
 {
-  "model": "opusplan",
+  "model": "opus",
   "permissions": {
     "allow": [
       "Bash(bin/editor:*)",

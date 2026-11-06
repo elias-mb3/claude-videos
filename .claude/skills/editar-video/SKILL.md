@@ -5,12 +5,15 @@ description: Fluxo completo para editar um vídeo neste repositório — definir
 
 # Editar um vídeo
 
-Comandos: `E="bin/editor python3 scripts/video.py <projeto>"`. Etapas longas em background.
+Comandos: `E="bin/editor python3 scripts/video.py <projeto>"`. Você (Opus) decide; etapas longas
+(transcrever, segmentos, final, tudo) vão para o subagente `executor-render`. Se `bin/verificar`
+não disser PRONTO, chame o `configurador` antes.
 
 ## 0. Projeto e estilo
 1. Pergunte o destino (TikTok/Shorts, Reels, YouTube, pessoal) e o tom. Escolha o preset em
-   `estilos/` (ou crie um novo copiando o mais próximo). Veja `referencias/` se o usuário tiver
-   deixado referências.
+   `estilos/` (ou crie um novo copiando o mais próximo). Leia `referencias/<estilo>/notas.md` se existir
+   (pode ter sido gerado por um modelo multimodal com `referencias/_modelo-analise.md`).
+   Se o usuário tiver links de referência e acesso a um modelo que processa vídeo, sugira esse caminho.
 2. `bin/novo-projeto <nome> <estilo>`; vídeo vai em `projetos/<nome>/bruto/` (ajuste `fonte`).
 3. `$E info` — confira duração, rotação e se o formato bate com o estilo.
 

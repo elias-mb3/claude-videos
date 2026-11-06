@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Diagnóstico da instalação. Saída curta (OK/FALTA por item); código 0 só se tudo estiver pronto.
+DIR="$(cd "$(dirname "$0")/.." && pwd)"; cd "$DIR"; ERR=0; mkdir -p .cache
+ok(){ echo "OK    $1"; }; falta(){ echo "FALTA $1 -> $2"; ERR=1; }
+command -v podman >/dev/null && ok "podman $(podman --version | awk '{print $3}')" || falta podman "instale o Podman (dnf/apt install podman)"
+for img in claude-videos-editor claude-videos-ytdl; do
+  podman image exists "localhost/$img:latest" 2>/dev/null && ok "imagem $img" || falta "imagem $img" "bin/setup"; done
+n=$(ls assets/fonts/*.ttf 2>/dev/null | wc -l); [ "$n" -ge 5 ] && ok "fontes ($n)" || falta fontes "bin/setup"
+[ -f hyperframes/node_modules/gsap/dist/gsap.min.js ] && ok gsap || falta gsap "bin/setup"
+ls -d .cache/huggingface/hub/models--Systran--faster-whisper-large-v3 >/dev/null 2>&1 && ok "modelo whisper large-v3" || falta "modelo whisper" "bin/setup"
+if podman image exists localhost/claude-videos-editor:latest 2>/dev/null; then
+  bin/editor bash -c '
+    ffmpeg -hide_banner -encoders 2>/dev/null | grep -q libx264 && echo "OK    ffmpeg+libx264" || echo "FALTA ffmpeg libx264 -> reconstruir imagem"
+    ffmpeg -hide_banner -filters 2>/dev/null | grep -q " subtitles " && echo "OK    libass" || echo "FALTA libass"
+    python3 -c "import faster_whisper" 2>/dev/null && echo "OK    faster-whisper" || echo "FALTA faster-whisper"
+    hyperframes --version >/dev/null 2>&1 && echo "OK    hyperframes $(hyperframes --version)" || echo "FALTA hyperframes"
+    chromium-browser --version >/dev/null 2>&1 && echo "OK    chromium" || echo "FALTA chromium"' > .cache/verificar.txt 2>&1
+  cat .cache/verificar.txt; grep -q FALTA .cache/verificar.txt && ERR=1
+fi
+[ $ERR = 0 ] && echo "PRONTO" || echo "INCOMPLETO"; exit $ERR
