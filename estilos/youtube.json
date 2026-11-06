@@ -1,0 +1,13 @@
+{
+  "descricao": "YouTube horizontal (16:9): ritmo de conversa, legendas em frase (sem karaokê) na base, capítulos no canto, zooms sutis. Exporte também os capítulos para a descrição do vídeo.",
+  "resolucao": [1920, 1080],
+  "cor": "natural",
+  "ritmo": { "pausa_min": 0.8, "pausa_alvo": 0.4, "alternar_zoom": 1.05 },
+  "zoom": { "lento": 0.08, "punch": 0.10, "ancora_vertical": 0.40 },
+  "legendas": { "fonte": "Noto Sans", "tamanho": 52, "max_palavras": 8, "max_chars": 44, "maiusculas": false,
+                "cor": "#FFFFFF", "destaque": "#FFFFFF", "contorno": 3, "sombra": 2, "margem_inferior": 70, "karaoke": false },
+  "paleta": { "fundo": "#0F172A", "claro": "#F8FAFC", "acento": "#38BDF8", "acento_escuro": "#0369A1", "dourado": "#FBBF24", "texto": "#0F172A" },
+  "fontes": { "titulo": "Playfair", "script": "Playfair", "texto": "Mont" },
+  "graficos": { "topo": 0.06, "lateral": 0.04 },
+  "audio": { "loudness": -14, "musica_volume": 0.25, "musica_destaque": 0.4, "crossfade": 2.0 }
+}

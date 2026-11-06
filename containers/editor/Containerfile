@@ -1,0 +1,16 @@
+# Container de EDIÇÃO. Roda SEM rede (bin/editor usa --network=none por padrão).
+# ffmpeg completo (RPM Fusion: libx264, libass), faster-whisper, Node 22 + HyperFrames, Chromium.
+FROM registry.fedoraproject.org/fedora:44
+ARG HYPERFRAMES_VERSION=0.9.19
+RUN dnf install -y \
+      https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-44.noarch.rpm \
+ && dnf install -y --allowerasing ffmpeg python3-pip nodejs npm chromium \
+      google-noto-sans-fonts google-noto-emoji-fonts \
+ && dnf clean all \
+ && pip install --no-cache-dir faster-whisper \
+ && npm install -g hyperframes@${HYPERFRAMES_VERSION}
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser \
+    HYPERFRAMES_BROWSER_PATH=/usr/bin/chromium-browser \
+    HF_HOME=/projeto/.cache/huggingface \
+    HOME=/projeto/.cache/home
+WORKDIR /projeto

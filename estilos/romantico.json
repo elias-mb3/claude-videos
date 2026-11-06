@@ -1,0 +1,13 @@
+{
+  "descricao": "Vídeo pessoal/emocional (declaração, pedido, aniversário). Vertical, ritmo calmo, serifas elegantes, paleta rosé e dourado, trilha instrumental suave.",
+  "resolucao": [1080, 1920],
+  "cor": "natural",
+  "ritmo": { "pausa_min": 0.7, "pausa_alvo": 0.35, "alternar_zoom": 1.06 },
+  "zoom": { "lento": 0.12, "punch": 0.14, "ancora_vertical": 0.42 },
+  "legendas": { "fonte": "Noto Sans Black", "tamanho": 64, "max_palavras": 4, "max_chars": 24, "maiusculas": true,
+                "cor": "#FFFFFF", "destaque": "#F5C884", "contorno": 6, "sombra": 3, "margem_inferior": 360, "karaoke": true },
+  "paleta": { "fundo": "#3B2530", "claro": "#FFF7EE", "acento": "#E8A6B4", "acento_escuro": "#B85C74", "dourado": "#E9C46A", "texto": "#3B2530" },
+  "fontes": { "titulo": "Playfair", "script": "Vibes", "texto": "Mont" },
+  "graficos": { "topo": 0.07, "lateral": 0.065 },
+  "audio": { "loudness": -16, "musica_volume": 0.42, "musica_destaque": 0.55, "crossfade": 2.5 }
+}

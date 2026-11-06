@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Baixa o ÁUDIO de um link em WAV para projetos/<projeto>/musicas.
+#   bin/ytdl <projeto> "URL"                 -> baixa
+#   bin/ytdl <projeto> "ytsearch5:termo" --flat-playlist --print "%(id)s|%(duration_string)s|%(title)s"
+# Respeite direitos autorais: veja a seção "Música" do README.
+set -euo pipefail
+DIR="$(cd "$(dirname "$0")/.." && pwd)"
+P="${1:?uso: bin/ytdl <projeto> URL [opções]}"; shift
+mkdir -p "$DIR/projetos/$P/musicas"
+if [[ "$*" == *--print* ]]; then EXTRA=(); else EXTRA=(-x --audio-format wav -o "%(title)s.%(ext)s"); fi
+exec podman run --rm --userns=keep-id -v "$DIR/projetos/$P/musicas:/musicas:z" \
+  localhost/claude-videos-ytdl:latest "${EXTRA[@]}" "$@"

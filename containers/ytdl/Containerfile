@@ -1,0 +1,6 @@
+# Container de DOWNLOAD (com rede). Só enxerga a pasta de músicas do projeto.
+FROM registry.fedoraproject.org/fedora:44
+RUN dnf install -y python3-pip ffmpeg-free && dnf clean all \
+ && pip install --no-cache-dir -U yt-dlp
+WORKDIR /musicas
+ENTRYPOINT ["yt-dlp"]

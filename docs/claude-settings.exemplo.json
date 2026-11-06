@@ -1,0 +1,23 @@
+{
+  "model": "opusplan",
+  "permissions": {
+    "allow": [
+      "Bash(bin/editor:*)",
+      "Bash(bin/novo-projeto:*)",
+      "Bash(ffprobe:*)",
+      "Bash(ffmpeg:*)",
+      "Bash(podman images:*)",
+      "Bash(podman ps:*)"
+    ],
+    "ask": [
+      "Bash(bin/ytdl:*)",
+      "Bash(NET=1 bin/editor:*)",
+      "Bash(bin/setup:*)"
+    ],
+    "deny": [
+      "Bash(hyperframes publish:*)",
+      "Bash(npx hyperframes publish:*)",
+      "Bash(git add -f:*)"
+    ]
+  }
+}

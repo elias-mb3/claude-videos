@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+# Ambiente de edição isolado e SEM rede.
+#   bin/editor                      -> shell
+#   bin/editor python3 scripts/...  -> roda um comando
+#   NET=1 bin/editor ...            -> libera rede (só para baixar modelo do Whisper / fontes / gsap)
+# Rótulo SELinux compartilhado (:z) para permitir vários containers ao mesmo tempo.
+set -euo pipefail
+DIR="$(cd "$(dirname "$0")/.." && pwd)"
+NETOPT="--network=none"; [[ "${NET:-0}" == 1 ]] && NETOPT=""
+TTY=""; [[ -t 0 && -t 1 ]] && TTY="-it"
+mkdir -p "$DIR/.cache/home"
+exec podman run --rm $TTY --userns=keep-id $NETOPT --shm-size=2g \
+  -e HF_HUB_OFFLINE="$([[ "${NET:-0}" == 1 ]] && echo 0 || echo 1)" \
+  -v "$DIR:/projeto:z" localhost/claude-videos-editor:latest "${@:-bash}"

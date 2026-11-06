@@ -1,0 +1,18 @@
+# Mídia e trabalho de cada projeto (nunca versionar vídeos pessoais)
+projetos/*
+!projetos/_modelo/
+!projetos/_modelo/**
+*.mp4
+*.mov
+*.mkv
+*.wav
+*.mp3
+*.m4a
+# Baixados pelo bin/setup
+.cache/
+assets/fonts/
+hyperframes/node_modules/
+hyperframes/package*.json
+.hyperframes/
+__pycache__/
+*.pyc

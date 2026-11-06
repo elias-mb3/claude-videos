@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Prepara tudo uma única vez: imagens Podman, fontes (OFL), GSAP local e modelo do Whisper.
+set -euo pipefail
+DIR="$(cd "$(dirname "$0")/.." && pwd)"; cd "$DIR"
+echo "==> Construindo imagens Podman"
+podman build -t claude-videos-editor containers/editor
+podman build -t claude-videos-ytdl containers/ytdl
+echo "==> Baixando fontes livres (SIL OFL) e GSAP para uso offline"
+NET=1 bin/editor bash -c '
+  set -e; mkdir -p assets/fonts hyperframes; cd assets/fonts
+  B=https://raw.githubusercontent.com/google/fonts/main/ofl
+  curl -fsSLo PlayfairDisplay.ttf        "$B/playfairdisplay/PlayfairDisplay%5Bwght%5D.ttf"
+  curl -fsSLo PlayfairDisplay-Italic.ttf "$B/playfairdisplay/PlayfairDisplay-Italic%5Bwght%5D.ttf"
+  curl -fsSLo GreatVibes-Regular.ttf     "$B/greatvibes/GreatVibes-Regular.ttf"
+  curl -fsSLo Montserrat.ttf             "$B/montserrat/Montserrat%5Bwght%5D.ttf"
+  curl -fsSLo Anton-Regular.ttf          "$B/anton/Anton-Regular.ttf"
+  cd /projeto/hyperframes && npm init -y >/dev/null && npm install --no-audit --no-fund gsap@3.15.0
+  hyperframes telemetry disable || true'
+echo "==> Baixando o modelo do Whisper (large-v3, ~3 GB)"
+NET=1 bin/editor python3 -c 'from faster_whisper import WhisperModel; WhisperModel("large-v3", device="cpu", compute_type="int8")'
+echo "Pronto. Crie um projeto com: bin/novo-projeto meu-video"

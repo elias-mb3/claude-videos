@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Cria projetos/<nome> a partir do modelo.  Uso: bin/novo-projeto <nome> [estilo]
+set -euo pipefail
+DIR="$(cd "$(dirname "$0")/.." && pwd)"
+N="${1:?uso: bin/novo-projeto <nome> [estilo]}"; E="${2:-tiktok-reels}"
+[[ -e "$DIR/projetos/$N" ]] && { echo "já existe: projetos/$N"; exit 1; }
+[[ -f "$DIR/estilos/$E.json" ]] || { echo "estilo inexistente: $E (veja estilos/)"; exit 1; }
+cp -r "$DIR/projetos/_modelo" "$DIR/projetos/$N"
+mkdir -p "$DIR/projetos/$N"/{bruto,musicas,saida,build}
+sed -i "s/\"estilo\": \"[^\"]*\"/\"estilo\": \"$E\"/" "$DIR/projetos/$N/projeto.json"
+echo "Criado projetos/$N (estilo $E). Coloque o vídeo em projetos/$N/bruto/"

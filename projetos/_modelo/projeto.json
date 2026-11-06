@@ -1,0 +1,43 @@
+{
+  "titulo": "Exemplo de projeto",
+  "estilo": "tiktok-reels",
+  "fonte": "bruto/video.mp4",
+  "idioma": "pt",
+  "ajustes_estilo": { "legendas": { "margem_inferior": 430 } },
+
+  "cortes": {
+    "remover": [
+      [0.0, 0.9, "liga a câmera"]
+    ],
+    "manter_pausas": [
+      [120.0, 122.0, "respiro dramático depois da frase forte"]
+    ]
+  },
+
+  "legendas": {
+    "ativar": true,
+    "correcoes": { "Cloud": "Claude", "ifone": "iPhone" },
+    "substituir_segmento": { "12": "Texto corrigido do segmento 12 da transcrição", "13": "" }
+  },
+
+  "zoom": [
+    { "de": 8.0, "ate": 13.5, "tipo": "lento", "nota": "frase de abertura" },
+    { "de": 45.2, "ate": 46.4, "tipo": "punch", "nota": "piada" }
+  ],
+
+  "abertura": { "dur": 3.0, "linha1": "Episódio 1", "titulo": "Título do vídeo", "sub": "subtítulo opcional" },
+  "encerramento": { "dur": 4.0, "linha1": "Obrigado!", "titulo": "Siga para mais", "sub": "@seu_perfil" },
+
+  "graficos": [
+    { "tipo": "capitulo", "texto": "O começo", "ancora": 30.0 },
+    { "tipo": "card", "kicker": "Dica", "titulo": "Título do card", "sub": "detalhe em uma linha", "ancora": 60.0, "dur": 5 },
+    { "tipo": "lista", "kicker": "Passo a passo", "ancora": 90.0, "dur": 12,
+      "itens": [[90.5, "1", "Primeiro item"], [94.0, "2", "Segundo item"], [98.0, "3", "Terceiro item"]] },
+    { "tipo": "citacao", "linha1": "Frase de impacto", "linha2": "complemento da frase", "ancora": 150.0, "dur": 5 }
+  ],
+
+  "musica": [
+    { "arquivo": "musicas/principal.wav", "inicio_faixa": 0, "de": 0, "ate": 30.0, "destaque": true },
+    { "arquivo": "musicas/apoio.wav", "inicio_faixa": 2, "de": 30.0, "ate": "fim" }
+  ]
+}
