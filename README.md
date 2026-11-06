@@ -8,10 +8,7 @@ renderiza. Você aprova cada etapa.
 Tudo roda **localmente, em containers Podman**. O container de edição **não tem acesso à
 rede**, então o seu vídeo nunca sai da máquina.
 
-```
-vídeo bruto ──► Whisper ──► cortes ──► cor + zoom ──► gráficos (HyperFrames) ──► legendas + trilha ──► MP4
-                 (texto)    (você aprova)              (HTML/GSAP → MOV alpha)    (ducking, loudnorm)
-```
+![Fluxo: o Opus orquestra; subagentes executam; etapas do vídeo bruto ao render final](docs/img/pipeline.svg)
 
 ## Comece com uma frase
 
@@ -39,6 +36,8 @@ Assim, o modelo mais capaz fica com as decisões criativas e o trabalho repetiti
 barato, sem encher o contexto principal com logs. Detalhes em [docs/modelos-e-tokens.md](docs/modelos-e-tokens.md).
 
 ## Exemplos de uso (presets em `estilos/`)
+
+![Mockups dos quatro presets: tiktok-reels, instagram-reels, romantico e youtube](docs/img/presets.png)
 
 | Preset | Formato | Para quê | Características |
 |---|---|---|---|
@@ -96,6 +95,8 @@ O Claude segue a skill [`editar-video`](.claude/skills/editar-video/SKILL.md):
 3. **Cortes:** pausas são comprimidas automaticamente. Cortes de conteúdo (falsos começos,
    repetições) são propostos para você aprovar.
 4. **Cor:** gera uma comparação neutro/natural/quente/vibrante para você escolher.
+![Componentes gráficos: capítulo, card, lista e citação](docs/img/graficos.png)
+
 5. **Zooms** (lento para emoção, punch para ênfase), **gráficos** (capítulos, cards, listas
    que aparecem no tempo da fala, citações, abertura e encerramento) e **trilha** (faixa principal
    nos momentos fortes, faixas de apoio com crossfade).
@@ -129,7 +130,7 @@ scripts/        video.py: o pipeline inteiro, em etapas
 estilos/        presets (TikTok, Reels, YouTube, romântico)
 referencias/    suas referências de estilo + prompt para análise com modelo multimodal
 projetos/       um diretório por vídeo (ignorado pelo git, exceto _modelo)
-docs/           modelos e tokens, exemplo de settings do Claude Code
+docs/           modelos e tokens, exemplo de settings do Claude Code, imagens (docs/img/src gera os mockups)
 CLAUDE.md       regras para o Claude Code neste repositório
 .claude/skills/ skill editar-video (o fluxo passo a passo)
 .claude/agents/ subagentes configurador e executor-render

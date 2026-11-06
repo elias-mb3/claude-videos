@@ -1,0 +1,13 @@
+@font-face{font-family:'Playfair';src:url('../../../assets/fonts/PlayfairDisplay.ttf');font-weight:400 900}
+@font-face{font-family:'Playfair';font-style:italic;src:url('../../../assets/fonts/PlayfairDisplay-Italic.ttf');font-weight:400 900}
+@font-face{font-family:'Vibes';src:url('../../../assets/fonts/GreatVibes-Regular.ttf')}
+@font-face{font-family:'Mont';src:url('../../../assets/fonts/Montserrat.ttf');font-weight:100 900}
+@font-face{font-family:'Anton';src:url('../../../assets/fonts/Anton-Regular.ttf')}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0E1116;font-family:'Mont';color:#E8EAED}
+.scene{position:relative;overflow:hidden;border-radius:28px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.scene .bg{position:absolute;inset:0}
+.person{position:absolute;left:50%;transform:translateX(-50%)}
+.cap{position:absolute;left:0;right:0;text-align:center;font-weight:900;-webkit-text-stroke:0}
+.label{font-family:'Mont';font-weight:700;letter-spacing:.18em;text-transform:uppercase;font-size:15px;color:#9AA4B2;margin-top:14px;text-align:center}
+.label b{color:#E8EAED;letter-spacing:.06em;font-size:19px;display:block;text-transform:none;margin-bottom:4px}
